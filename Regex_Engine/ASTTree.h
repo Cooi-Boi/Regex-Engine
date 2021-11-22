@@ -5,7 +5,7 @@
 #include "ASTTree_node.h"
 
 /*
-eÎªÖÕ½á·û
+eä¸ºç»ˆç»“ç¬¦
 EXP -> A | EXP
     -> A
 A   -> B + A
@@ -19,11 +19,11 @@ C   -> (EXP)
 class ASTTree
 {
     private:
-        ASTTree_node* root;             // Node ½Úµã
-        string re;                      // ÕıÔò±í´ïÊ½ ×Ö·û´®
-        char token;                     // µ±Ç°´¦Àí×Ö·û
-        int re_size;                    // ÎªÁËget_next_token ½ÚÊ¡·´¸´µ÷ÓÃre.size()º¯Êıµ÷ÓÃµÄ´ú¼Û
-        int pos;                        // µ±Ç°ÕıÔÚ´¦Àí×Ö·ûÎ»ÖÃ get_next_tokenÓÃ
+        ASTTree_node* root;             // Node èŠ‚ç‚¹
+        string re;                      // æ­£åˆ™è¡¨è¾¾å¼ å­—ç¬¦ä¸²
+        char token;                     // å½“å‰å¤„ç†å­—ç¬¦
+        int re_size;                    // ä¸ºäº†get_next_token èŠ‚çœåå¤è°ƒç”¨re.size()å‡½æ•°è°ƒç”¨çš„ä»£ä»·
+        int pos;                        // å½“å‰æ­£åœ¨å¤„ç†å­—ç¬¦ä½ç½® get_next_tokenç”¨
 
         friend class NFA;
     public:
@@ -32,11 +32,11 @@ class ASTTree
         }
 
         ~ASTTree()  {delete_node_helper();}
-                                    // ¸ù¾İÉÏÃæBNFÊ½×Ó µÃµ½ÒÔÏÂÓï·¨×ª»¯ Ö÷ÒªÒòÎªÓÅÏÈ¼¶´ÎĞò
-        ASTTree_node* parse_EXP();  // ´¦Àí |
-        ASTTree_node* parse_A();    // ´¦Àí + ×¢Òâµİ¹é
-        ASTTree_node* parse_B();    // ´¦Àí * µ¥Ä¿ÔËËã·û
-        ASTTree_node* parse_C();    // ´¦Àí¿ÉÄÜ´æÔÚµÄ
+                                    // æ ¹æ®ä¸Šé¢BNFå¼å­ å¾—åˆ°ä»¥ä¸‹è¯­æ³•è½¬åŒ– ä¸»è¦å› ä¸ºä¼˜å…ˆçº§æ¬¡åº
+        ASTTree_node* parse_EXP();  // å¤„ç† |
+        ASTTree_node* parse_A();    // å¤„ç† + æ³¨æ„é€’å½’
+        ASTTree_node* parse_B();    // å¤„ç† * å•ç›®è¿ç®—ç¬¦
+        ASTTree_node* parse_C();    // å¤„ç†å¯èƒ½å­˜åœ¨çš„
 
         char get_next_token();
         void build_AST(string& str);
@@ -46,13 +46,13 @@ class ASTTree
 };
 
 
-char ASTTree::get_next_token()          // µÃµ½ÏÂÒ»¸ö×Ö·û
+char ASTTree::get_next_token()          // å¾—åˆ°ä¸‹ä¸€ä¸ªå­—ç¬¦
 {
     auto ret = (re_size > (++pos) ? re[pos] : 0);
     return ret;
 }
 
-void ASTTree::build_AST(string& str)    // ´´½¨AST³éÏóÊ÷ µİ¹éÏÂ½µ´¦Àí
+void ASTTree::build_AST(string& str)    // åˆ›å»ºASTæŠ½è±¡æ ‘ é€’å½’ä¸‹é™å¤„ç†
 {
     if(str.empty())      return;
 
@@ -61,7 +61,7 @@ void ASTTree::build_AST(string& str)    // ´´½¨AST³éÏóÊ÷ µİ¹éÏÂ½µ´¦Àí
     root = parse_EXP();
 }
 
-ASTTree_node* ASTTree::parse_EXP()      // ¿ªÊ¼µİ¹éÏÂ½µ´¦Àí °´ÕÕ×îÉÏÃæ×¢ÊÍ¸ø³öµÄ ÕıÔò BNF À´´¦Àí
+ASTTree_node* ASTTree::parse_EXP()      // å¼€å§‹é€’å½’ä¸‹é™å¤„ç† æŒ‰ç…§æœ€ä¸Šé¢æ³¨é‡Šç»™å‡ºçš„ æ­£åˆ™ BNF æ¥å¤„ç†
 {
     ASTTree_node* ret = parse_A();
     while(token == '|')
@@ -74,10 +74,10 @@ ASTTree_node* ASTTree::parse_EXP()      // ¿ªÊ¼µİ¹éÏÂ½µ´¦Àí °´ÕÕ×îÉÏÃæ×¢ÊÍ¸ø³öµÄ
     return ret;
 }
 
-ASTTree_node* ASTTree::parse_A()       // ´¦Àí +
+ASTTree_node* ASTTree::parse_A()       // å¤„ç† +
 {
     ASTTree_node* ret = parse_B();
-    while(token != 0 && token != ')' && token != '|')   //¿ÉÄÜµ±Ç°Îª| »òÕß ) ÔòÖ±½Ó²»½øÈëÅĞ¶Ï
+    while(token != 0 && token != ')' && token != '|')   //å¯èƒ½å½“å‰ä¸º| æˆ–è€… ) åˆ™ç›´æ¥ä¸è¿›å…¥åˆ¤æ–­
     {
         ASTTree_node* left = ret,*right = parse_B();
         ret = new ASTTree_node('+',EXP_CONCAT,left,right);
@@ -85,7 +85,7 @@ ASTTree_node* ASTTree::parse_A()       // ´¦Àí +
     return ret;
 }
 
-ASTTree_node* ASTTree::parse_B()       // ´¦Àí *
+ASTTree_node* ASTTree::parse_B()       // å¤„ç† *
 {
     ASTTree_node* ret = parse_C();
     if(token == '*')
@@ -97,7 +97,7 @@ ASTTree_node* ASTTree::parse_B()       // ´¦Àí *
     return ret;
 }
 
-ASTTree_node* ASTTree::parse_C()       //´¦Àí×î¸ßÓÅÏÈ¼¶ () ×¢Òâ¿ÉÄÜ | ÊÇ×îÇ°ÃæµÄ ĞèÒªÌØ±ğ×¢Òâ
+ASTTree_node* ASTTree::parse_C()       //å¤„ç†æœ€é«˜ä¼˜å…ˆçº§ () æ³¨æ„å¯èƒ½ | æ˜¯æœ€å‰é¢çš„ éœ€è¦ç‰¹åˆ«æ³¨æ„
 {
     ASTTree_node* ret = nullptr;
     if(token == ')')    return ret;
@@ -106,13 +106,13 @@ ASTTree_node* ASTTree::parse_C()       //´¦Àí×î¸ßÓÅÏÈ¼¶ () ×¢Òâ¿ÉÄÜ | ÊÇ×îÇ°ÃæµÄ
     {
         token = get_next_token();
         ret = parse_EXP();
-        token = get_next_token();      //Ìø¹ıÓÒ±ßÀ¨ºÅ(
+        token = get_next_token();      //è·³è¿‡å³è¾¹æ‹¬å·(
     }
     else
     {
-        if(token == '|' || !token)               // ÌØÊâÇé¿ö
+        if(token == '|' || !token)               // ç‰¹æ®Šæƒ…å†µ
             ret = new ASTTree_node(0,EXP_EPSILON);
-        else                                     // Õı³£´¦Àí ÖÕ½á·û
+        else                                     // æ­£å¸¸å¤„ç† ç»ˆç»“ç¬¦
         {
             ret = new ASTTree_node(token,EXP_CHR);
             token = get_next_token();
@@ -121,7 +121,7 @@ ASTTree_node* ASTTree::parse_C()       //´¦Àí×î¸ßÓÅÏÈ¼¶ () ×¢Òâ¿ÉÄÜ | ÊÇ×îÇ°ÃæµÄ
     return ret;
 }
 
-void ASTTree::print_tree()              // ÖĞĞò±éÀú ±È½Ï·½±ãÑéÖ¤ÊÇ·ñÉú³ÉÕıÈ·
+void ASTTree::print_tree()              // å…ˆåºéå† æ¯”è¾ƒæ–¹ä¾¿éªŒè¯æ˜¯å¦ç”Ÿæˆæ­£ç¡®
 {
     if(!this)   return;
     cout << "ASTTree_Print: " << endl;
